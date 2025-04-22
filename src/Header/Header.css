@@ -1,0 +1,11 @@
+.main-header {
+    font-family:'Franklin Gothic Medium', 'Arial Narrow', Arial, sans-serif;
+    
+}
+
+.header-div {
+    display: flex;
+    flex-direction: row;
+    text-align: center;
+    background-color: #ff00fe;
+}

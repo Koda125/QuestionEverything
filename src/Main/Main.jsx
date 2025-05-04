@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 
 function Main() {
     const [ askedQuestion, setAskedQuestion ] = useState("")
-    const API_KEY = ""
+    
 
     function askAway(){
     console.log("WHat's being asked? ",askedQuestion)

@@ -1,11 +1,32 @@
 import { useState, useEffect } from "react";
+import OpenAI from "openai";
 
 function Main() {
     const [ askedQuestion, setAskedQuestion ] = useState("")
+    const [ AIResponse, setAIResponse ] = useState("")
     
 
-    function askAway(){
+    
+
+
+
+    async function  askAway(){
     console.log("WHat's being asked? ",askedQuestion)
+    try {
+    const response = await openai.responses.create({
+    model: "gpt-4-turbo",
+    input: [
+        {role: "user", content: "Tell me a lie about the following without telling me its a lie: " + askedQuestion}
+        ]
+    }); 
+    console.log(response.output_text);
+    setAIResponse(response.output_text)
+
+}catch (err) {
+    console.log("Error in the API request: ", err);
+}
+    
+    
     }
     return(
         <>
@@ -19,7 +40,15 @@ function Main() {
                 />
             </div> 
             <button onClick={askAway}>Ask me!</button>
+            {AIResponse !== "" ? 
+            <div>
+                <h3>{AIResponse}</h3>
 
+            </div>
+            :
+                null
+            
+            }
            
         
         </>

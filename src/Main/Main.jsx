@@ -7,7 +7,10 @@ function Main() {
     
 
     
-
+const openai = new OpenAI({
+    
+    dangerouslyAllowBrowser: true
+    });
 
 
     async function  askAway(){

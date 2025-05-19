@@ -3,10 +3,15 @@
     
 }
 
-/* .header-div {
-    font-size: large;
+.header-div {
+    
     display: flex;
     flex-direction: row;
     text-align: center;
     background-color: #1da99e;;
-} */
+    border-style: double;
+  border-width: thick;
+  border-color: black;
+  box-shadow: 1px 1px;
+    
+}

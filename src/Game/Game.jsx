@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 
-function _template() {
+function Game() {
 
     return(
         <div>
@@ -9,4 +9,4 @@ function _template() {
     )
 }
 
-export default _template;
+export default Game;

@@ -35,6 +35,7 @@ function Game() {
                 });
             console.log(response.output_text, response2.output_text, response3.output_text);
             setQuestions([response.output_text, response2.output_text, response3.output_text])
+            shuffleArray(questions)
             setIsTrue(true);
         
         }catch (err) {
@@ -44,7 +45,18 @@ function Game() {
 
     async function verifyFact(event) {
         console.log(event)
+        
     }
+
+    function shuffleArray(array){
+        console.log(array)
+        for (let i = array.length - 1; i > 0; i--) { 
+            const j = Math.floor(Math.random() * (i + 1)); 
+            [array[i], array[j]] = [array[j], array[i]]; 
+          } 
+           return array;
+        }; 
+    
 
     return(
         <div>

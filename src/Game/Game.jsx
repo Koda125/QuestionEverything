@@ -6,6 +6,8 @@ function Game() {
     const [ questions, setQuestions ] = useState([])
     const [ difficulty, setDifficulty ] = useState('Easy')
     const [ isTrue, setIsTrue ] = useState(false)
+    const [ correct, setCorrect ] = useState("")
+    const [ conditional, setConditional ] = useState(false)
 
     const openai = new OpenAI({
         apiKey: "",
@@ -14,6 +16,7 @@ function Game() {
 
     async function TwoTruthsOneLie() {
         console.log("Can you determine the lie??😉")
+        let responses = [];
         try {
             const response = await openai.responses.create({
             model: "gpt-4-turbo",
@@ -34,8 +37,8 @@ function Game() {
                     max_output_tokens: 50
                 });
             console.log(response.output_text, response2.output_text, response3.output_text);
-            setQuestions([response.output_text, response2.output_text, response3.output_text])
-            shuffleArray(questions)
+            responses = [response.output_text, response2.output_text, response3.output_text]
+            shuffleArray(responses)
             setIsTrue(true);
         
         }catch (err) {
@@ -43,8 +46,23 @@ function Game() {
         }
     }
 
-    async function verifyFact(event) {
-        console.log(event)
+    async function verifyFact(prompt) {
+        console.log(prompt)
+        try{
+            const fact = await openai.responses.create({
+                model: "gpt-4-turbo",
+                input: [
+                    {role: "user", content: "is the following a true" + prompt}],
+                    max_output_tokens: 20
+                
+            })
+            setCorrect(fact.output_text)
+            setConditional(true)
+            
+
+        }catch (err){
+            console.log("There was an error in verifing: ", err)
+        }
         
     }
 
@@ -54,7 +72,7 @@ function Game() {
             const j = Math.floor(Math.random() * (i + 1)); 
             [array[i], array[j]] = [array[j], array[i]]; 
           } 
-           return array;
+           return setQuestions(array);
         }; 
     
 
@@ -89,7 +107,7 @@ function Game() {
             </div>
             {isTrue ? 
             <div>
-                <h2>Can you determine the lie in the following?</h2>
+                <h2>Can you determine the lie in the following? If you think you know the lie, why not click on it?</h2>
             {questions.map((question, index) => (
                 <h4 key={index} onClick={(e)=>{verifyFact(question)}}>{question}</h4>
             ))}
@@ -99,6 +117,10 @@ function Game() {
             null
         
         }
+        {conditional ?
+            <h2>{correct}</h2>
+        :
+        null}
         </div>
     )
 }

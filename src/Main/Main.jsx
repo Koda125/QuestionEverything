@@ -8,7 +8,7 @@ function Main() {
 
     
 const openai = new OpenAI({
-    
+    apiKey: "",
     dangerouslyAllowBrowser: true
     });
 

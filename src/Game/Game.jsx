@@ -8,6 +8,8 @@ function Game() {
     const [ isTrue, setIsTrue ] = useState(false)
     const [ correct, setCorrect ] = useState("")
     const [ conditional, setConditional ] = useState(false)
+    const [ isLoading, setIsLoading ] = useState(false);
+    const [ isLoading2, setIsLoading2 ] = useState(false);
 
     const openai = new OpenAI({
         apiKey: "",
@@ -18,6 +20,9 @@ function Game() {
         console.log("Can you determine the lie??😉")
         let responses = [];
         try {
+            setConditional(false);
+            setIsLoading(true);
+            setIsTrue(false);
             const response = await openai.responses.create({
             model: "gpt-4-turbo",
             input: [
@@ -39,29 +44,38 @@ function Game() {
             console.log(response.output_text, response2.output_text, response3.output_text);
             responses = [response.output_text, response2.output_text, response3.output_text]
             shuffleArray(responses)
-            setIsTrue(true);
+
+            
         
         }catch (err) {
             console.log("Error in the API request: ", err);
+        }finally{
+            setIsLoading(false);
+            setIsTrue(true);
         }
     }
 
     async function verifyFact(prompt) {
         console.log(prompt)
         try{
+            setConditional(false);
+            setIsLoading2(true)
             const fact = await openai.responses.create({
                 model: "gpt-4-turbo",
                 input: [
-                    {role: "user", content: "is the following a true" + prompt}],
-                    max_output_tokens: 20
+                    {role: "user", content: "is the following true" + prompt}],
+                    max_output_tokens: 50
                 
             })
             setCorrect(fact.output_text)
-            setConditional(true)
+            
             
 
         }catch (err){
             console.log("There was an error in verifing: ", err)
+        }finally{
+            setIsLoading2(false)
+            setConditional(true)
         }
         
     }
@@ -105,6 +119,10 @@ function Game() {
             <div className="button-div">
                 <button className="start-button" onClick={TwoTruthsOneLie}>Start!</button>
             </div>
+            {isLoading ? 
+                <h3>Generating two truths and one lie...</h3>
+            :
+            null}
             {isTrue ? 
             <div>
                 <h2>Can you determine the lie in the following? If you think you know the lie, why not click on it?</h2>
@@ -117,6 +135,10 @@ function Game() {
             null
         
         }
+        {isLoading2 ? 
+        <h3>Are you sure that's the lie? Let me check...</h3>
+        :
+        null}
         {conditional ?
             <h2>{correct}</h2>
         :

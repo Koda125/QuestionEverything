@@ -63,7 +63,7 @@ function Game() {
             const fact = await openai.responses.create({
                 model: "gpt-4-turbo",
                 input: [
-                    {role: "user", content: "is the following true" + prompt}],
+                    { role: "user", content: "is the following true" + prompt }],
                     max_output_tokens: 50
                 
             })

@@ -4,6 +4,7 @@ import OpenAI from "openai";
 function Main() {
     const [ askedQuestion, setAskedQuestion ] = useState("")
     const [ AIResponse, setAIResponse ] = useState("")
+    const [ isLoading, setIsLoading ] = useState(false);
     
 
     
@@ -14,8 +15,10 @@ const openai = new OpenAI({
 
 
     async function  askAway(){
-    console.log("WHat's being asked? ",askedQuestion)
+    console.log("What's being asked? ",askedQuestion)
     try {
+        setIsLoading(true);
+        setAIResponse("")
     const response = await openai.responses.create({
     model: "gpt-4-turbo",
     input: [
@@ -27,6 +30,9 @@ const openai = new OpenAI({
 
 }catch (err) {
     console.log("Error in the API request: ", err);
+}finally{
+    setIsLoading(false);
+
 }
     
     
@@ -43,6 +49,10 @@ const openai = new OpenAI({
                 />
             </div> 
             <button onClick={askAway}>Ask me!</button>
+            {isLoading ? 
+            <h3>Please wait while we complile and answer for you...</h3>
+            :
+            null }
             {AIResponse !== "" ? 
             <div>
                 <h3>{AIResponse}</h3>

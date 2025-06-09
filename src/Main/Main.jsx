@@ -55,7 +55,7 @@ const openai = new OpenAI({
             null }
             {AIResponse !== "" ? 
             <div>
-                <h3>{AIResponse}</h3>
+                <h3>Your answer is: {AIResponse}</h3>
 
             </div>
             :

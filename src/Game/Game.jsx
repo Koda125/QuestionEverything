@@ -10,6 +10,7 @@ function Game() {
     const [ conditional, setConditional ] = useState(false)
     const [ isLoading, setIsLoading ] = useState(false);
     const [ isLoading2, setIsLoading2 ] = useState(false);
+    const [ score, setScore ] = useState(0)
 
     const openai = new OpenAI({
         apiKey: "",
@@ -63,19 +64,39 @@ function Game() {
             const fact = await openai.responses.create({
                 model: "gpt-4-turbo",
                 input: [
-                    { role: "user", content: "is the following true" + prompt }],
+                    { role: "user", content: "is the following a lie" + prompt + "start response with Yes or No" }],
                     max_output_tokens: 50
                 
             })
             setCorrect(fact.output_text)
+            console.log("The sliced fact is: ", fact.output_text.slice(0, 3))
+            if( fact.output_text.slice(0, 3) === "Yes" ) {
+                if( difficulty === 'Easy') {
+                setScore(prev => prev - 100);
+                }else if (difficulty === 'Medium'){
+                    setScore(prev => prev - 75) 
+                } else if(difficulty === 'Hard'){
+                    setScore(prev => prev - 50)
+                }
+                console.log("The current score: ", score)
+            }else {
+                if( difficulty === 'Easy') {
+                    setScore(prev => prev + 50);
+                    }else if (difficulty === 'Medium'){
+                        setScore(prev => prev + 75) 
+                    } else if(difficulty === 'Hard'){
+                        setScore(prev => prev + 100)
+                    }
+                console.log( "The slice of correct is: ", correct.slice(0, 3) )
             
+            }
             
 
         }catch (err){
             console.log("There was an error in verifing: ", err)
         }finally{
             setIsLoading2(false)
-            setConditional(true)
+            setConditional(true)  
         }
         
     }
@@ -92,6 +113,9 @@ function Game() {
 
     return(
         <div>
+            <div>
+                <h2>Please start back choosing a difficulty, once selected, please click "Start!"</h2>
+            </div>
             <div>
                 <label>
                         <input type="radio" name="myRadio" value="Easy" 
@@ -118,6 +142,10 @@ function Game() {
 
             <div className="button-div">
                 <button className="start-button" onClick={TwoTruthsOneLie}>Start!</button>
+            </div>
+            <br/>
+            <div>
+                <h3>Current score is: {score}</h3>
             </div>
             {isLoading ? 
                 <h3>Generating two truths and one lie...</h3>
